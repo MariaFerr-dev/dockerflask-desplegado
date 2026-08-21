@@ -37,3 +37,4 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-frontend:latest
             ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-frontend:${{ github.sha }}
+            //mafee
