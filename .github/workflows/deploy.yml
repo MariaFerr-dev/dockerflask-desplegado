@@ -37,7 +37,6 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-frontend:latest
             ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-frontend:${{ github.sha }}
-            //mafee
       - name: Construir y subir imagen
         uses: docker/build-push-action@v5
         with:
@@ -52,7 +51,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_KEY }}
           script: |
-            cd -/DockerFlaskDesplegado
+            cd -/dockerflask-desplegado
             docker-compose pull backend
             docker-compose up -d 
-            
