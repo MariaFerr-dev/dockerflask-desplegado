@@ -64,5 +64,9 @@ jobs:
           use_insecure_cipher: true
           script: |
             cd ~/dockerflask-desplegado
-            git pull origin main
-            docker compose up -d --build backend frontend nginx
+            git fetch origin main
+            git checkout origin/main -- frontend nginx
+            docker compose up -d --build backend frontend
+            if docker compose config --services | grep -qx nginx; then
+              docker compose up -d --build nginx
+            fi
