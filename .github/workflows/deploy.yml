@@ -44,6 +44,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
+          use_insecure_cipher: true
           script: |
             cd ~/dockerflask-desplegado
             docker-compose pull backend
