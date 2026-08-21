@@ -5,7 +5,7 @@ on:
     branches: ["main"]
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar codigo
@@ -38,3 +38,21 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-frontend:latest
             ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-frontend:${{ github.sha }}
             //mafee
+      - name: Construir y subir imagen
+        uses: docker/build-push-action@v5
+        with:
+          context: ./mafee
+          push: true
+          tags: |
+            blackt1221/api-689:latest
+      - name: Desplegar en el servidor cloud
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_KEY }}
+          script: |
+            cd -/DockerFlaskDesplegado
+            docker-compose pull backend
+            docker-compose up -d 
+            

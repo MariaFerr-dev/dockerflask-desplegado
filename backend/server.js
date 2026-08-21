@@ -1,31 +1,56 @@
 const express = require("express");
 const cors = require("cors");
-const { Pool } = require("pg");
+const mysql = require('mysql2/promise');
 
 const app = express();
 
 app.use(cors());
 
-const pool = new Pool({
+const poolConfig = {
+    host: process.env.DB_HOST || 'db',
     user: process.env.DB_USER,
-    host: "db",
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
-    port: 5432
-});
+    port: process.env.DB_PORT || 3306,
+    waitForConnections: true,
+    connectionLimit: 10
+};
 
-app.get("/", (req, res) => {
-    res.json({
-        mensaje: "API ADSO funcionando correctamente"
-    });
+let pool;
+async function initPool(){
+    pool = mysql.createPool(poolConfig);
+}
+
+initPool();
+
+app.get("/", async (req, res) => {
+    try{
+        const conn = await pool.getConnection();
+        await conn.ping();
+        conn.release();
+        return res.send('Conexión exitosa a la base de datos');
+    } catch(err){
+        return res.status(500).json({ mensaje: "Error de conexión a la base de datos", error: err.message });
+    }
 });
 
 app.get("/db", async (req, res) => {
     try {
-        const datos = await pool.query("SELECT NOW()");
-        res.json(datos.rows);
+        const [rows] = await pool.query("SELECT NOW() AS now");
+        res.json(rows);
     } catch (err) {
         res.status(500).json(err.message);
+    }
+});
+
+app.get('/health', async (req,res)=>{
+    try{
+        const conn = await pool.getConnection();
+        await conn.ping();
+        conn.release();
+        res.status(200).send('OK');
+    } catch(err){
+        res.status(500).send('ERROR');
     }
 });
 
