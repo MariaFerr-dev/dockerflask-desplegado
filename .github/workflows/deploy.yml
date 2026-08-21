@@ -44,6 +44,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_KEY }}
           script: |
-            cd -/dockerflask-desplegado
+            cd ~/dockerflask-desplegado
             docker-compose pull backend
-            docker-compose up -d 
+            docker-compose up -d
