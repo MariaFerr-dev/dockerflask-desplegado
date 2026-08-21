@@ -37,13 +37,6 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-frontend:latest
             ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-frontend:${{ github.sha }}
-      - name: Construir y subir imagen
-        uses: docker/build-push-action@v5
-        with:
-          context: ./mafee
-          push: true
-          tags: |
-            blackt1221/api-689:latest
       - name: Desplegar en el servidor cloud
         uses: appleboy/ssh-action@v1.0.3
         with:
