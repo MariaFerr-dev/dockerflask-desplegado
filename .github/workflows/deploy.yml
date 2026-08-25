@@ -46,7 +46,7 @@ jobs:
           context: ./backend
           push: false
           load: true
-          tags: 
+          tags: |
             ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-backend:latest
             ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-backend:${{ github.sha }}
 
@@ -67,7 +67,9 @@ jobs:
 
 
       - name: Subir la imagen a Docker Hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-backend:latest'
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-backend:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-backend:${{ github.sha }}
 
       - name: Desplegar en el servidor cloud
         uses: appleboy/ssh-action@v1.0.3
