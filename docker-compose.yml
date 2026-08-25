@@ -93,3 +93,4 @@ networks:
 
 volumes:
   datos_mysql:
+  uptime-kuma-data:
