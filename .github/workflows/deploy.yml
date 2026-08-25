@@ -53,12 +53,7 @@ jobs:
       - name: escanear contenedor con trivy
         uses: aquasecurity/trivy-action@master
         with:
-          
-          context: ./frontend
-          push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-frontend:latest
-            ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-frontend:${{ github.sha }}
+          image-ref: ${{ secrets.DOCKER_USERNAME }}/proyecto-compose-backend:${{ github.sha }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
