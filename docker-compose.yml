@@ -1,5 +1,5 @@
 services:
-nginx-proxy-manager:
+  nginx-proxy-manager:
     image: 'jc21/nginx-proxy-manager:latest'
     container_name: proxy-manager
     restart: always
@@ -10,7 +10,7 @@ nginx-proxy-manager:
     volumes:
       - ./npm_data:/data
       - ./npm_letsencrypt:/etc/letsencrypt
-nginx: 
+  nginx:
     image: nginx:alpine
     container_name: proxy-nginx
     ports:
@@ -21,7 +21,7 @@ nginx:
         - backend
     networks:
       - red_interna
-uptime-kuma:
+  uptime-kuma:
     image: louislam/uptime-kuma:1
     container_name: uptime-kuma
     restart: always
@@ -30,9 +30,9 @@ uptime-kuma:
     volumes:
       - uptime-kuma-data:/app/data
     networks:
-      - red-cba
+      - red_interna
       
-db:
+  db:
     image: mysql:8.4
     container_name: proyecto-db
     restart: unless-stopped
