@@ -79,20 +79,21 @@ jobs:
             cd ~/dockerflask-desplegado
             git fetch origin main
             git checkout origin/main -- backend docker-compose.yml frontend nginx
-            docker compose up -d db
+            docker compose up -d --force-recreate db
             for attempt in $(seq 1 60); do
-              health_status=$(docker inspect --format '{{.State.Health.Status}}' proyecto-db 2>/dev/null || true)
-              if [ "$health_status" = "healthy" ]; then
+              if docker compose exec -T db sh -c 'mysqladmin ping -h 127.0.0.1 -u root -p"$MYSQL_ROOT_PASSWORD" --silent' >/dev/null 2>&1; then
                 break
               fi
-              if [ "$health_status" = "unhealthy" ] || [ "$attempt" -eq 60 ]; then
+              container_status=$(docker inspect --format '{{.State.Status}}' proyecto-db 2>/dev/null || true)
+              if [ "$attempt" -eq 60 ] || [ "$container_status" = "exited" ]; then
                 docker compose logs db
+                docker inspect proyecto-db --format 'status={{.State.Status}} exit={{.State.ExitCode}} error={{.State.Error}}'
                 exit 1
               fi
               echo "Waiting for MySQL (${attempt}/60)..."
               sleep 2
             done
-            docker compose up -d --build --force-recreate backend frontend
+            docker compose up -d --build --force-recreate --no-deps backend frontend
             if docker compose config --services | grep -qx nginx; then
               docker compose up -d --build --force-recreate nginx
             fi
