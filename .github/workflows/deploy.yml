@@ -75,9 +75,10 @@ jobs:
           port: 22
           use_insecure_cipher: true
           script: |
+            set -e
             cd ~/dockerflask-desplegado
             git fetch origin main
-            git checkout origin/main -- frontend nginx
+            git checkout origin/main -- backend docker-compose.yml frontend nginx
             docker compose up -d --build --force-recreate backend frontend
             if docker compose config --services | grep -qx nginx; then
               docker compose up -d --build --force-recreate nginx
