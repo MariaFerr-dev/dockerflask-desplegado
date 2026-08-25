@@ -79,6 +79,19 @@ jobs:
             cd ~/dockerflask-desplegado
             git fetch origin main
             git checkout origin/main -- backend docker-compose.yml frontend nginx
+            docker compose up -d db
+            for attempt in $(seq 1 60); do
+              health_status=$(docker inspect --format '{{.State.Health.Status}}' proyecto-db 2>/dev/null || true)
+              if [ "$health_status" = "healthy" ]; then
+                break
+              fi
+              if [ "$health_status" = "unhealthy" ] || [ "$attempt" -eq 60 ]; then
+                docker compose logs db
+                exit 1
+              fi
+              echo "Waiting for MySQL (${attempt}/60)..."
+              sleep 2
+            done
             docker compose up -d --build --force-recreate backend frontend
             if docker compose config --services | grep -qx nginx; then
               docker compose up -d --build --force-recreate nginx
