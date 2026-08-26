@@ -10,6 +10,8 @@ services:
     volumes:
       - ./npm_data:/data
       - ./npm_letsencrypt:/etc/letsencrypt
+    networks:
+      - red_interna
   nginx:
     image: nginx:alpine
     container_name: proxy-nginx
