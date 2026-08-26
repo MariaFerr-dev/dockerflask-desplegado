@@ -80,6 +80,7 @@ jobs:
             git fetch origin main
             git checkout origin/main -- backend docker-compose.yml frontend nginx
             docker compose down || true
+            docker compose up -d --force-recreate nginx-proxy-manager
             docker compose up -d --force-recreate db
             for attempt in $(seq 1 60); do
               if docker compose exec -T db sh -c 'mysqladmin ping -h 127.0.0.1 -u root -p"$MYSQL_ROOT_PASSWORD" --silent' >/dev/null 2>&1; then
