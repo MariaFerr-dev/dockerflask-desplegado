@@ -10,10 +10,6 @@ sample = Flask(__name__)
 
 @sample.route("/")
 def home():
-    return "Error interno", 500
-
-##@sample.route("/")
-##def home():
     try:
         # Credenciales extraídas dinámicamente desde variables de entorno
         conn = pymysql.connect(
@@ -39,4 +35,4 @@ def home():
 if __name__ == '__main__':
     debug_mode = os.environ.get("FLASK_DEBUG", "false").lower() == "true"
     # # nosec B104 le indica a Bandit que bindear 0.0.0.0 es intencional para contenedores
-    sample.run(host="0.0.0.0", port=5050, debug=True)  # nosec B104
+    sample.run(host="0.0.0.0", port=5050, debug=debug_mode)  # nosec B104
