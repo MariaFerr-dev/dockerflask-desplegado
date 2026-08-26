@@ -2,7 +2,7 @@ name: Publicar Imagen en Docker Hub
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "feature/vulnerabilidades"]
 
 jobs:
  test-and-security:
