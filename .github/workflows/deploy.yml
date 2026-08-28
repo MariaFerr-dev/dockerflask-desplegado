@@ -22,7 +22,7 @@ jobs:
        pip install bandit
    - name: Escaneo de seguridad con Bandit
      run: bandit -r . -s B101 #IGNORAR LOS ARCHIVOS TEST
-   - name: Ejecutar pruebas
+   - name: Ejecutar pruebas #
      run: pytest 
        
  build-and-deploy:
