@@ -3,12 +3,13 @@ FROM node:22-bookworm-slim
 WORKDIR /app
 
 RUN apt-get update \
+	&& apt-get upgrade -y \
 	&& apt-get install -y --no-install-recommends curl \
 	&& rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
 
-RUN npm install --omit=dev \
+RUN npm ci --omit=dev \
 	&& npm cache clean --force \
 	&& rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /root/.npm
 
