@@ -34,6 +34,20 @@ services:
     networks:
       - red_interna
       
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "4040:4040"
+    networks:
+      - red_interna
+
+
+
+      
   db:
     image: mysql:8.4
     container_name: proyecto-db
